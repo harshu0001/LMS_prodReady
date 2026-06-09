@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Colors */
+  --color-background: #fcf8ff;
+  --color-on-background: #1b1b24;
+  --color-surface-bright: #fcf8ff;
+  --color-surface-dim: #dcd8e5;
+  --color-surface: #fcf8ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f2ff;
+  --color-surface-container: #f0ecf9;
+  --color-surface-container-high: #eae6f4;
+  --color-surface-container-highest: #e4e1ee;
+  --color-on-surface: #1b1b24;
+  --color-on-surface-variant: #464555;
+  --color-inverse-surface: #302f39;
+  --color-inverse-on-surface: #f3effc;
+  --color-outline: #777587;
+  --color-outline-variant: #c7c4d8;
+  --color-surface-tint: #4d44e3;
+  --color-primary: #3525cd;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #4f46e5;
+  --color-on-primary-container: #dad7ff;
+  --color-inverse-primary: #c3c0ff;
+  --color-secondary: #505f76;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d0e1fb;
+  --color-on-secondary-container: #54647a;
+  --color-tertiary: #7e3000;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #a44100;
+  --color-on-tertiary-container: #ffd2be;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #e2dfff;
+  --color-primary-fixed-dim: #c3c0ff;
+  --color-on-primary-fixed: #0f0069;
+  --color-on-primary-fixed-variant: #3323cc;
+  --color-secondary-fixed: #d3e4fe;
+  --color-secondary-fixed-dim: #b7c8e1;
+  --color-on-secondary-fixed: #0b1c30;
+  --color-on-secondary-fixed-variant: #38485d;
+  --color-tertiary-fixed: #ffdbcc;
+  --color-tertiary-fixed-dim: #ffb695;
+  --color-on-tertiary-fixed: #351000;
+  --color-on-tertiary-fixed-variant: #7b2f00;
+
+  /* Font Families */
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+
+  /* Border Radius */
+  --radius-DEFAULT: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --spacing-base: 4px;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-container-max: 1280px;
+
+  /* Width overrides to prevent conflicts with custom spacing scale */
+  --width-xs: 20rem;
+  --width-sm: 24rem;
+  --width-md: 28rem;
+  --width-lg: 32rem;
+  --width-xl: 36rem;
+  --width-2xl: 42rem;
+  --width-3xl: 48rem;
+  --width-4xl: 56rem;
+  --width-5xl: 64rem;
+  --width-6xl: 72rem;
+  --width-7xl: 80rem;
+
+  /* Max-width overrides to prevent conflicts with custom spacing scale */
+  --max-w-xs: 20rem;
+  --max-w-sm: 24rem;
+  --max-w-md: 28rem;
+  --max-w-lg: 32rem;
+  --max-w-xl: 36rem;
+  --max-w-2xl: 42rem;
+  --max-w-3xl: 48rem;
+  --max-w-4xl: 56rem;
+  --max-w-5xl: 64rem;
+  --max-w-6xl: 72rem;
+  --max-w-7xl: 80rem;
+}
+
+html.dark, :root.dark {
+  /* Colors */
+  --color-background: #0d0c15;
+  --color-on-background: #e4e1ee;
+  --color-surface-bright: #0d0c15;
+  --color-surface-dim: #1d1b28;
+  --color-surface: #0d0c15;
+  --color-surface-container-lowest: #141320;
+  --color-surface-container-low: #1a1829;
+  --color-surface-container: #211e32;
+  --color-surface-container-high: #27243c;
+  --color-surface-container-highest: #2e2a46;
+  --color-on-surface: #e4e1ee;
+  --color-on-surface-variant: #b5b2c7;
+  --color-outline: #8d8a9e;
+  --color-outline-variant: #4f4c63;
+  --color-primary: #8a7cff;
+  --color-on-primary: #0a0066;
+  --color-primary-container: #5d4bf5;
+  --color-on-primary-container: #dad7ff;
+  --color-secondary: #cbd5e1;
+  --color-on-secondary: #122238;
+  --color-secondary-container: #33445c;
+  --color-on-secondary-container: #d6e5ff;
+  
+  --color-tertiary: #ffb695;
+  --color-on-tertiary: #542200;
+  --color-tertiary-container: #763200;
+  --color-on-tertiary-container: #ffdbcc;
+
+  --color-primary-fixed: #1b1647;
+  --color-primary-fixed-dim: #322b70;
+  --color-on-primary-fixed: #e2dfff;
+  --color-on-primary-fixed-variant: #c3c0ff;
+
+  --color-secondary-fixed: #1e2837;
+  --color-secondary-fixed-dim: #313f54;
+  --color-on-secondary-fixed: #d3e4fe;
+  --color-on-secondary-fixed-variant: #b7c8e1;
+
+  --color-tertiary-fixed: #3d1500;
+  --color-tertiary-fixed-dim: #5c2200;
+  --color-on-tertiary-fixed: #ffdbcc;
+  --color-on-tertiary-fixed-variant: #ffb695;
+}
+
+/* Dark Mode General Overrides */
+.dark .bg-white,
+.dark .bg-surface-container-lowest,
+.dark .soft-ui-card.bg-white {
+  background-color: var(--color-surface-container-lowest) !important;
+  color: var(--color-on-surface) !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
+  background-color: var(--color-background) !important;
+}
+
+.dark .bg-white\/50,
+.dark .bg-white\/60,
+.dark .bg-white\/70,
+.dark .bg-white\/75,
+.dark .bg-white\/80 {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+  backdrop-filter: blur(16px) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .border-slate-100,
+.dark .border-outline-variant,
+.dark .border-outline-variant\/30,
+.dark .border-outline-variant\/60,
+.dark .border-outline-variant\/20,
+.dark .border-outline\/20,
+.dark .border-white\/20,
+.dark .border-white\/30,
+.dark .border-white\/40 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .soft-ui-shadow,
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark img {
+  opacity: 0.95;
+  filter: brightness(0.9) contrast(1.05);
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c7c4d8;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a9a6c0;
+}
+
+/* Material Symbols Styling */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Soft UI Depth & Effects */
+.soft-ui-shadow {
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+.soft-ui-shadow-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.soft-ui-shadow-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 1);
+}
+
+.glass-effect {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+/* Body Styling override */
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Decouple standard max-width classes from spacing collision in Tailwind v4 */
+.max-w-xs { max-width: 20rem !important; }
+.max-w-sm { max-width: 24rem !important; }
+.max-w-md { max-width: 28rem !important; }
+.max-w-lg { max-width: 32rem !important; }
+.max-w-xl { max-width: 36rem !important; }
+.max-w-2xl { max-width: 42rem !important; }
+.max-w-3xl { max-width: 48rem !important; }
+
