@@ -9,7 +9,7 @@ export default function AdminDashboardPage() {
   const teachers = [
     {
       name: "Dr. Sarah Jenkins",
-      email: "sarah.j@lumina.edu",
+      email: "sarah.j@adhyan.edu",
       specialization: "Advanced Physics",
       status: "Active",
       statusClass: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",
@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
     },
     {
       name: "Mark Thompson",
-      email: "m.thompson@lumina.edu",
+      email: "m.thompson@adhyan.edu",
       specialization: "Creative Writing",
       status: "On Leave",
       statusClass: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400",
@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
     },
     {
       name: "Elena Rodriguez",
-      email: "elena.r@lumina.edu",
+      email: "elena.r@adhyan.edu",
       specialization: "UX Design",
       status: "Active",
       statusClass: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400",

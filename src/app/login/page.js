@@ -76,7 +76,7 @@ export default function LoginPage() {
                 <span className="material-symbols-outlined text-primary text-[32px] md:hidden" style={{ fontVariationSettings: "'FILL' 1" }}>
                   lightbulb
                 </span>
-                <span className="font-heading text-headline-sm text-primary font-bold md:hidden">Lumina Learning</span>
+                <span className="font-heading text-headline-sm text-primary font-bold md:hidden">Adhyan Learning</span>
               </div>
 
               <div className="mb-lg text-center md:text-left">
@@ -209,7 +209,7 @@ export default function LoginPage() {
           <footer className="w-full py-6 px-gutter border-t border-outline-variant/20 bg-surface-container-low/30">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 max-w-[500px] mx-auto md:max-w-none">
               <div>
-                <p className="text-[10px] font-bold text-secondary/60">© 2026 Lumina Learning.</p>
+                <p className="text-[10px] font-bold text-secondary/60">© 2026 Adhyan Learning.</p>
               </div>
               <nav className="flex flex-wrap justify-center gap-4">
                 <Link className="text-[10px] font-bold text-secondary/70 hover:text-primary transition-colors" href="#">

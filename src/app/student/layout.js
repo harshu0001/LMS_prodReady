@@ -58,7 +58,7 @@ export default function StudentLayout({ children }) {
           <div className="w-8 h-8 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
             <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>school</span>
           </div>
-          <span className="font-heading text-headline-sm text-primary font-extrabold tracking-tight">Lumina</span>
+          <span className="font-heading text-headline-sm text-primary font-extrabold tracking-tight">Adhyan</span>
         </div>
 
         {/* User Card */}
@@ -121,7 +121,7 @@ export default function StudentLayout({ children }) {
                 onClick={() => window.location.href = "/student/dashboard"}
                 className="font-heading text-headline-sm text-primary font-bold md:hidden cursor-pointer hover:opacity-80 active:scale-95 transition-all"
               >
-                Lumina
+                Adhyan
               </span>
               <div className="hidden md:flex items-center bg-surface-container-low px-sm py-1.5 rounded-full w-96 border border-outline-variant/20">
                 <span className="material-symbols-outlined text-on-surface-variant mr-xs text-lg">search</span>

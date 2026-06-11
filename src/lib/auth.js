@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "lumina-lms-super-secret-key-change-in-production-2026"
+  process.env.JWT_SECRET || "adhyan-lms-super-secret-key-change-in-production-2026"
 );
 
 export async function signToken(payload) {

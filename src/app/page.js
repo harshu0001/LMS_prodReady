@@ -29,7 +29,7 @@ export default function Home() {
       {/* Top Navigation Bar */}
       <header className="bg-white/60 dark:bg-[#12111a]/70 backdrop-blur-lg shadow-md dark:shadow-black/40 sticky top-4 z-50 h-20 flex justify-between items-center px-lg w-[calc(100%-2rem)] max-w-container-max mx-auto rounded-full border border-white/40 dark:border-white/10 transition-all mt-4">
         <div className="flex items-center gap-2">
-          <span className="font-heading text-headline-md text-primary font-bold">Lumina Learning</span>
+          <span className="font-heading text-headline-md text-primary font-bold">Adhyan Learning</span>
         </div>
         <nav className="hidden md:flex items-center gap-lg">
           <Link href="#features" className="font-medium text-secondary hover:text-primary transition-colors duration-200">
@@ -77,7 +77,7 @@ export default function Home() {
                 Empower Your Future with <span className="text-primary">Immersive Learning</span>
               </h1>
               <p className="text-lg text-secondary max-w-lg leading-relaxed">
-                Lumina is the all-in-one learning management system designed to make online education more interactive, collaborative, and rewarding for everyone.
+                Adhyan is the all-in-one learning management system designed to make online education more interactive, collaborative, and rewarding for everyone.
               </p>
               <div className="flex flex-col sm:flex-row gap-md pt-xs">
                 <Link href="/signup" className="bg-primary text-on-primary px-xl py-md rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all shadow-lg active:scale-95">
@@ -398,7 +398,7 @@ export default function Home() {
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaFCjubad0XZjWIVR9Jgg9mL-Zh6L7FfSAWfi2l1WPEK_SGMVYA5gUoBszw9Kk5OfGmheNx59568Dsqo6cLqoCPPJsL47pmF-Zo6kll2GdzWaNbS1kNO0dMkUIAaOFTwtYZH4hVbDHI1LwR0cb--6eoI5sJ4sBOWcl9T0vfekVOQnJkNktTmIbgYW6tj0EM3ZIN9ajqVmWnDNG6rJPzDT2fS26OL5hv2ivB-PeoNb4lPfLmkLyp5GthSkcGRhxkx0cBN72rdnkOvfQ"
                 />
                 <p className="font-heading text-headline-sm text-on-surface italic leading-relaxed">
-                  "Lumina Learning completely transformed how I manage my professional development. The interactive lessons feel more like engaging experiences than chores, and the progress tracking keeps me motivated every day."
+                  "Adhyan Learning completely transformed how I manage my professional development. The interactive lessons feel more like engaging experiences than chores, and the progress tracking keeps me motivated every day."
                 </p>
                 <div>
                   <p className="font-semibold text-on-surface">Sarah J. Miller</p>
@@ -418,7 +418,7 @@ export default function Home() {
                 Common Questions
               </span>
               <h2 className="font-heading text-[32px] md:text-[40px] text-on-surface mb-sm font-bold tracking-tight">Frequently Asked Questions</h2>
-              <p className="text-secondary max-w-xl mx-auto text-sm">Have more questions? Contact our dedicated support team anytime at support@luminalearning.com</p>
+              <p className="text-secondary max-w-xl mx-auto text-sm">Have more questions? Contact our dedicated support team anytime at support@adhyanlearning.com</p>
             </div>
 
             <div className="space-y-sm max-w-3xl mx-auto">
@@ -429,7 +429,7 @@ export default function Home() {
                 },
                 {
                   q: "Can I easily switch between student and instructor portals?",
-                  a: "Absolutely! Lumina supports unified profiles. If you have teaching permissions, you can toggle between student mode and instructor mode via your sidebar navigation in one click."
+                  a: "Absolutely! Adhyan supports unified profiles. If you have teaching permissions, you can toggle between student mode and instructor mode via your sidebar navigation in one click."
                 },
                 {
                   q: "Do you offer discounts for educational institutions?",
@@ -508,10 +508,10 @@ export default function Home() {
           {/* Logo Column */}
           <div className="lg:col-span-2 space-y-md">
             <div className="flex items-center gap-2">
-              <span className="font-heading text-headline-md text-primary font-bold">Lumina Learning</span>
+              <span className="font-heading text-headline-md text-primary font-bold">Adhyan Learning</span>
             </div>
             <p className="text-xs text-on-surface-variant max-w-sm leading-relaxed">
-              Lumina is the all-in-one learning management system designed to make digital education more immersive, interactive, and rewarding for students and teachers worldwide.
+              Adhyan is the all-in-one learning management system designed to make digital education more immersive, interactive, and rewarding for students and teachers worldwide.
             </p>
             {/* Newsletter sign-up */}
             <div className="space-y-sm pt-2">
@@ -558,7 +558,7 @@ export default function Home() {
           <div className="space-y-sm">
             <h4 className="text-xs font-bold text-on-surface uppercase tracking-wider">Company</h4>
             <ul className="space-y-2">
-              <li><Link href="#" className="text-xs text-secondary hover:text-primary transition-colors">About Lumina</Link></li>
+              <li><Link href="#" className="text-xs text-secondary hover:text-primary transition-colors">About Adhyan</Link></li>
               <li><Link href="#" className="text-xs text-secondary hover:text-primary transition-colors">Careers</Link></li>
               <li><Link href="#" className="text-xs text-secondary hover:text-primary transition-colors">Press &amp; Media</Link></li>
               <li><Link href="#" className="text-xs text-secondary hover:text-primary transition-colors">Privacy Policy</Link></li>
@@ -569,7 +569,7 @@ export default function Home() {
 
         {/* Footer Bottom */}
         <div className="max-w-container-max mx-auto px-gutter pt-8 border-t border-outline-variant/30 flex flex-col sm:flex-row justify-between items-center gap-md">
-          <p className="text-xs text-on-surface-variant font-medium">© 2026 Lumina Learning Suite. All rights reserved.</p>
+          <p className="text-xs text-on-surface-variant font-medium">© 2026 Adhyan Learning Suite. All rights reserved.</p>
           
           {/* Social Icons including Twitter/X logo */}
           <div className="flex items-center gap-md">

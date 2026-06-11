@@ -10,7 +10,7 @@ export default function StudentProfilePage() {
     name: "Alex Johnson",
     role: "Senior UI Designer & Python Enthusiast",
     location: "San Francisco, CA",
-    email: "alex.j@lumina.edu",
+    email: "alex.j@adhyan.edu",
     avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCmmgXejxBaOgT1lwd7MY6LTXEEJulxn5c_O8-C21hFTn_PGczkLy51SwZZ7Os6tIc0UUDKXHbStn3a18vlzvb7E_uGvQ2b-D5iR7T8rL3UkaSLKfEmUciQWGrAEEAHn5HJT19_LDVcIjMHQJzu_t_ENegWYQuHBaKJ0m_-GWcbX9B7ICl4J-C4GgDXU0vo56T1zvlreztLVbpUoB3koWw64lyZr33U8U9OFYwTkxDn89kU964eLBXeACH27ZNuAkyN9JqNl3tUEgah",
     courses: 12,
     avgScore: "84%",

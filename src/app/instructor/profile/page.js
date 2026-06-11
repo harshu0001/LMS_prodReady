@@ -221,7 +221,7 @@ export default function InstructorProfilePage() {
                 <span className="material-symbols-outlined text-primary-fixed text-xl">star</span>
                 <div>
                   <p className="text-sm font-bold">Top 1% Course Instructor</p>
-                  <p className="text-xs text-primary-fixed opacity-80">Lumina Achievement Award</p>
+                  <p className="text-xs text-primary-fixed opacity-80">Adhyan Achievement Award</p>
                 </div>
               </li>
             </ul>

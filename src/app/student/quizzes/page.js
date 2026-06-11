@@ -311,7 +311,7 @@ export default function QuizzesPage() {
 
       {/* Footer spacer */}
       <footer className="pt-xl text-center text-xs text-on-surface-variant/40 border-t border-outline-variant/10">
-        © 2024 Lumina Learning Ecosystem. All rights reserved.
+        © 2024 Adhyan Learning Ecosystem. All rights reserved.
       </footer>
     </div>
   );

@@ -13,7 +13,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-101",
       name: "Sarah Chen",
-      email: "sarah.chen@lumina.edu",
+      email: "sarah.chen@adhyan.edu",
       specialization: "UX/UI Design & Psychology",
       department: "Computer Science",
       activeCourses: 4,
@@ -24,7 +24,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-102",
       name: "Marcus Rodriguez",
-      email: "m.rodriguez@lumina.edu",
+      email: "m.rodriguez@adhyan.edu",
       specialization: "Full Stack Development",
       department: "Computer Science",
       activeCourses: 6,
@@ -35,7 +35,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-103",
       name: "Linda Wright",
-      email: "l.wright@lumina.edu",
+      email: "l.wright@adhyan.edu",
       specialization: "Ethics & Philosophy",
       department: "Liberal Arts",
       activeCourses: 2,
@@ -46,7 +46,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-104",
       name: "David Miller",
-      email: "david.m@lumina.edu",
+      email: "david.m@adhyan.edu",
       specialization: "Marketing Dynamics",
       department: "Business Management",
       activeCourses: 3,
@@ -57,7 +57,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-105",
       name: "Dr. Sarah Jenkins",
-      email: "sarah.j@lumina.edu",
+      email: "sarah.j@adhyan.edu",
       specialization: "Advanced Physics",
       department: "Applied Sciences",
       activeCourses: 5,
@@ -68,7 +68,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-106",
       name: "Mark Thompson",
-      email: "m.thompson@lumina.edu",
+      email: "m.thompson@adhyan.edu",
       specialization: "Creative Writing & Literature",
       department: "Liberal Arts",
       activeCourses: 3,
@@ -79,7 +79,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-107",
       name: "Dr. James Wilson",
-      email: "james.wilson@lumina.edu",
+      email: "james.wilson@adhyan.edu",
       specialization: "Applied Math & Calculus",
       department: "Applied Sciences",
       activeCourses: 4,

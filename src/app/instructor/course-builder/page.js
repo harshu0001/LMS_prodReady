@@ -14,9 +14,9 @@ export default function CourseBuilderPage() {
   const [sections, setSections] = useState([
     {
       id: "sec-1",
-      title: "Introduction to Lumina",
+      title: "Introduction to Adhyan",
       lessons: [
-        { id: "les-1-1", title: "1.1 Welcome Message", type: "video", desc: "Welcome to Lumina Learning! Learn the platform fundamentals.", videoName: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", assets: ["Syllabus.pdf"] },
+        { id: "les-1-1", title: "1.1 Welcome Message", type: "video", desc: "Welcome to Adhyan Learning! Learn the platform fundamentals.", videoName: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", assets: ["Syllabus.pdf"] },
         { id: "les-1-2", title: "1.2 Learning Objectives", type: "document", desc: "Define the core milestones and objectives of the course.", assets: ["Objectives_Guide.pdf"] },
       ],
     },

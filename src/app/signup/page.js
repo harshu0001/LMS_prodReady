@@ -35,7 +35,7 @@ export default function SignupPage() {
               </span>
             </Link>
             <h1 className="font-heading text-[48px] leading-tight font-extrabold mb-sm tracking-tight">
-              Illuminate Your Potential.
+              Iladhyante Your Potential.
             </h1>
             <p className="text-lg leading-relaxed text-on-primary/80">
               Join 50,000+ educators and learners in a space designed for clarity, focus, and growth.
@@ -90,7 +90,7 @@ export default function SignupPage() {
           {/* Header */}
           <div className="text-center md:text-left">
             <div className="md:hidden inline-block mb-md">
-              <span className="font-heading text-headline-md text-primary font-bold">Lumina Learning</span>
+              <span className="font-heading text-headline-md text-primary font-bold">Adhyan Learning</span>
             </div>
             <h2 className="font-heading text-[28px] font-bold text-on-surface mb-xs">Create your account</h2>
             <p className="text-sm text-on-surface-variant">
@@ -240,7 +240,7 @@ export default function SignupPage() {
           {/* Footer */}
           <footer className="pt-xl text-center md:text-left">
             <p className="text-xs font-medium text-on-surface-variant/60">
-              © 2026 Lumina Learning. All rights reserved.
+              © 2026 Adhyan Learning. All rights reserved.
             </p>
           </footer>
         </div>

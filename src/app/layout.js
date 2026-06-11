@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Lumina Learning | Empower Your Future",
-  description: "Lumina is the all-in-one learning management system designed to make online education more interactive, collaborative, and rewarding.",
+  title: "Adhyan Learning | Empower Your Future",
+  description: "Adhyan is the all-in-one learning management system designed to make online education more interactive, collaborative, and rewarding.",
 };
 
 export default function RootLayout({ children }) {

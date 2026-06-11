@@ -38,7 +38,7 @@ export default function AdminLayout({ children }) {
       {/* Desktop Side Navigation */}
       <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant p-md z-50">
         <div className="mb-xl px-2">
-          <h1 className="font-heading text-headline-sm font-bold text-primary">Lumina Learning</h1>
+          <h1 className="font-heading text-headline-sm font-bold text-primary">Adhyan Learning</h1>
           <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider mt-0.5">Admin Portal</p>
         </div>
 
@@ -107,7 +107,7 @@ export default function AdminLayout({ children }) {
               >
                 <span className="material-symbols-outlined">menu</span>
               </button>
-              <span className="font-heading text-headline-sm text-primary font-bold md:hidden">Lumina Admin</span>
+              <span className="font-heading text-headline-sm text-primary font-bold md:hidden">Adhyan Admin</span>
               
               <div className="hidden md:flex items-center bg-surface-container-low px-sm py-1.5 rounded-full w-96 border border-outline-variant/20">
                 <span className="material-symbols-outlined text-on-surface-variant mr-xs text-lg">search</span>
@@ -168,7 +168,7 @@ export default function AdminLayout({ children }) {
             >
               <div className="flex justify-between items-center mb-lg px-2">
                 <div>
-                  <h1 className="font-heading text-headline-sm font-bold text-primary">Lumina Admin</h1>
+                  <h1 className="font-heading text-headline-sm font-bold text-primary">Adhyan Admin</h1>
                   <p className="text-[10px] text-on-surface-variant font-bold uppercase mt-0.5">Mobile Menu</p>
                 </div>
                 <button 
