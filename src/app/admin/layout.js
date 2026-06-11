@@ -27,10 +27,10 @@ export default function AdminLayout({ children }) {
 
   const navItems = [
     { name: "Overview", href: "/admin/dashboard", icon: "dashboard" },
-    { name: "Teacher Management", href: "#", icon: "school" },
-    { name: "Student Management", href: "#", icon: "group" },
-    { name: "Batches", href: "#", icon: "layers" },
-    { name: "Settings", href: "#", icon: "settings" },
+    { name: "Teacher Management", href: "/admin/teachers", icon: "school" },
+    { name: "Student Management", href: "/admin/students", icon: "group" },
+    { name: "Batches", href: "/admin/batches", icon: "layers" },
+    { name: "Settings", href: "/admin/settings", icon: "settings" },
   ];
 
   return (
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }) {
         {/* Navigation Links */}
         <nav className="flex-grow space-y-xs">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname.startsWith(item.href) || (item.name === "Overview" && pathname === "/admin/dashboard");
             return (
               <Link
                 key={item.name}
@@ -65,10 +65,10 @@ export default function AdminLayout({ children }) {
           })}
           
           <div className="pt-sm">
-            <button className="w-full bg-primary text-on-primary py-3 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-md shadow-primary/10">
+            <Link href="/admin/batches/create" className="w-full bg-primary text-on-primary py-3 px-4 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-md shadow-primary/10">
               <span className="material-symbols-outlined text-sm">add_circle</span>
               Create New Batch
-            </button>
+            </Link>
           </div>
         </nav>
 
@@ -78,24 +78,20 @@ export default function AdminLayout({ children }) {
             <span className="material-symbols-outlined">home</span>
             <span>Landing Page</span>
           </Link>
-          <Link href="/student/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
-            <span className="material-symbols-outlined">school</span>
-            <span>Student Dashboard</span>
-          </Link>
+          <button 
+            onClick={async () => {
+              const { logoutToLanding } = await import("../actions/auth");
+              await logoutToLanding();
+            }}
+            className="w-full flex items-center gap-sm p-sm text-[#DC143C] hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-all text-sm text-left font-semibold cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[#DC143C]">logout</span>
+            <span>Log Out</span>
+          </button>
           <Link href="/instructor/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
             <span className="material-symbols-outlined">supervisor_account</span>
             <span>Instructor Portal</span>
           </Link>
-          <button 
-            onClick={async () => {
-              const { logout } = await import("../actions/auth");
-              await logout();
-            }}
-            className="w-full flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm text-left font-medium"
-          >
-            <span className="material-symbols-outlined">logout</span>
-            <span>Log Out</span>
-          </button>
         </div>
       </aside>
 
@@ -184,7 +180,7 @@ export default function AdminLayout({ children }) {
               </div>
               <nav className="space-y-xs flex-grow">
                 {navItems.map((item) => {
-                  const isActive = pathname === item.href;
+                  const isActive = pathname.startsWith(item.href) || (item.name === "Overview" && pathname === "/admin/dashboard");
                   return (
                     <Link
                       key={item.name}
@@ -203,13 +199,23 @@ export default function AdminLayout({ children }) {
                 })}
               </nav>
               <div className="pt-md border-t border-outline-variant/30 space-y-xs">
-                <Link href="/" className="flex items-center gap-sm p-sm text-on-surface-variant rounded-lg text-sm">
-                  <span className="material-symbols-outlined">logout</span>
+                <Link href="/" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
+                  <span className="material-symbols-outlined">home</span>
                   <span>Landing Page</span>
                 </Link>
-                <Link href="/student/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant rounded-lg text-sm">
-                  <span className="material-symbols-outlined">school</span>
-                  <span>Student Portal</span>
+                <button 
+                  onClick={async () => {
+                    const { logoutToLanding } = await import("../actions/auth");
+                    await logoutToLanding();
+                  }}
+                  className="w-full flex items-center gap-sm p-sm text-[#DC143C] hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-all text-sm text-left font-semibold cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[#DC143C]">logout</span>
+                  <span>Log Out</span>
+                </button>
+                <Link href="/instructor/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
+                  <span className="material-symbols-outlined">supervisor_account</span>
+                  <span>Instructor Portal</span>
                 </Link>
               </div>
             </div>

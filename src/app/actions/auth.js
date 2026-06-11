@@ -186,6 +186,11 @@ export async function logout() {
   redirect("/login");
 }
 
+export async function logoutToLanding() {
+  await deleteSessionCookie();
+  redirect("/");
+}
+
 export async function getCurrentUserAction() {
   const session = await getSession();
   if (!session) return null;

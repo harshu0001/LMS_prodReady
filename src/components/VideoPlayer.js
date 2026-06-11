@@ -177,7 +177,8 @@ export default function VideoPlayer({ videoUrl }) {
         <iframe
           ref={iframeRef}
           src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&showinfo=0&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
-          className="w-full h-full border-none pointer-events-none"
+          className="w-full h-full border-none pointer-events-none origin-center"
+          style={{ transform: "scale(1.08)" }}
           allow="autoplay; encrypted-media"
           title="Course YouTube video player"
         ></iframe>
@@ -196,7 +197,7 @@ export default function VideoPlayer({ videoUrl }) {
       {/* Play Overlay Screen (Only visible when paused) */}
       <div 
         onClick={togglePlay}
-        className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer ${isPlaying ? "bg-black/0" : "bg-black/40"}`}
+        className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer ${isPlaying ? "bg-black/0" : "bg-black/60 backdrop-blur-md"}`}
       >
         {!isPlaying && (
           <button 
