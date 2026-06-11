@@ -75,7 +75,7 @@ export default function AdminLayout({ children }) {
         {/* Bottom portal switcher links */}
         <div className="mt-auto space-y-xs pt-md border-t border-outline-variant/30">
           <Link href="/" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
-            <span className="material-symbols-outlined">logout</span>
+            <span className="material-symbols-outlined">home</span>
             <span>Landing Page</span>
           </Link>
           <Link href="/student/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
@@ -86,6 +86,16 @@ export default function AdminLayout({ children }) {
             <span className="material-symbols-outlined">supervisor_account</span>
             <span>Instructor Portal</span>
           </Link>
+          <button 
+            onClick={async () => {
+              const { logout } = await import("../actions/auth");
+              await logout();
+            }}
+            className="w-full flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm text-left font-medium"
+          >
+            <span className="material-symbols-outlined">logout</span>
+            <span>Log Out</span>
+          </button>
         </div>
       </aside>
 

@@ -1,0 +1,115 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum DeadlineStatus {
+  PENDING
+  COMPLETED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  role          Role           @default(STUDENT)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  enrollments   Enrollment[]
+  deadlines     Deadline[]
+  streakDays    StreakDay[]
+  courses       Course[]       // Created by user (if INSTRUCTOR/ADMIN)
+}
+
+model Course {
+  id            String         @id @default(uuid())
+  title         String
+  category      String
+  imageUrl      String
+  description   String         @db.Text
+  instructorId  String
+  instructor    User           @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  isPublished   Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  enrollments   Enrollment[]
+  deadlines     Deadline[]
+  quizzes       Quiz[]
+}
+
+model Enrollment {
+  id            String         @id @default(uuid())
+  studentId     String
+  student       User           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  courseId      String
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress      Int            @default(0) // 0 to 100
+  completed     Boolean        @default(false)
+  lastAccessedAt DateTime      @default(now())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([studentId, courseId])
+}
+
+model Deadline {
+  id          String         @id @default(uuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String?
+  course      Course?        @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  title       String
+  subtitle    String
+  dueDate     DateTime
+  status      DeadlineStatus @default(PENDING)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model StreakDay {
+  id          String         @id @default(uuid())
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label       String         // "M", "T", "W", "T", "F"
+  completed   Boolean        @default(false)
+  date        DateTime       // Date tracking for weekly streak
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([userId, date])
+}
+
+model Recommendation {
+  id          String         @id @default(uuid())
+  title       String
+  rating      String
+  reviews     String
+  desc        String         @db.Text
+  icon        String
+  bgClass     String
+  createdAt   DateTime       @default(now())
+}
+
+model Quiz {
+  id            String         @id @default(uuid())
+  title         String
+  description   String         @db.Text
+  status        String         // "LOCKED", "PENDING", "COMPLETED"
+  score         Int?
+  maxScore      Int
+  courseId      String?
+  course        Course?        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+}

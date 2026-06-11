@@ -3,15 +3,30 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { getCurrentUserAction, logout } from "../actions/auth";
 
 export default function StudentLayout({ children }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [user, setUser] = useState({ name: "Alex Johnson", email: "", role: "Undergraduate" });
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
+    
+    async function fetchUser() {
+      const dbUser = await getCurrentUserAction();
+      if (dbUser) {
+        setUser({
+          name: dbUser.name,
+          email: dbUser.email,
+          role: dbUser.role === "ADMIN" ? "Administrator" : dbUser.role === "INSTRUCTOR" ? "Instructor" : "Undergraduate",
+        });
+      }
+    }
+    fetchUser();
   }, []);
+
 
   const toggleDarkMode = () => {
     const nextDark = !isDark;
@@ -36,7 +51,10 @@ export default function StudentLayout({ children }) {
     <div className="min-h-screen bg-slate-50 text-on-surface font-sans flex overflow-hidden">
       {/* Desktop Side Navigation */}
       <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant p-md z-50">
-        <div className="mb-xl flex items-center gap-2 px-2">
+        <div 
+          onClick={() => window.location.href = "/student/dashboard"}
+          className="mb-xl flex items-center gap-2 px-2 cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+        >
           <div className="w-8 h-8 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
             <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>school</span>
           </div>
@@ -46,13 +64,13 @@ export default function StudentLayout({ children }) {
         {/* User Card */}
         <div className="flex items-center gap-sm p-sm mb-lg bg-surface-container-low rounded-xl">
           <img 
-            alt="Alex Johnson avatar" 
+            alt={`${user.name} avatar`} 
             className="w-10 h-10 rounded-full object-cover border border-outline-variant" 
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-_5YH1ryaziaoKwLR4HqkA35TmJuvlmA2B0_Enev6kFV_LX_V4ypUBRkpC10vrhU3cvb8WiqbRE9CnoAFHsb1uMcrO78VkRGLBYDuq5sWBI2CRRYpj9VB5hVpwRhdwWy8T6ZaNBXSzJCbIUII1E9UTL04X9SWLE1s6Up1v2AKFVVrTMKKXs_R9whD8bUAFANur8kKWNIirIyU8dHExSWXKSJqtZeFbxy_nBv8tLTJgzXDIpdDCebt7SOD32UDP4axykcX9aOSl84r"
           />
           <div>
-            <p className="font-semibold text-sm text-on-surface leading-tight">Alex Johnson</p>
-            <p className="text-[11px] text-on-surface-variant">Undergraduate</p>
+            <p className="font-semibold text-sm text-on-surface leading-tight">{user.name}</p>
+            <p className="text-[11px] text-on-surface-variant">{user.role}</p>
           </div>
         </div>
 
@@ -81,18 +99,15 @@ export default function StudentLayout({ children }) {
 
         {/* Bottom utility links */}
         <div className="mt-auto space-y-xs pt-md border-t border-outline-variant/30">
-          <Link href="/" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
-            <span className="material-symbols-outlined">logout</span>
-            <span>Landing Page</span>
-          </Link>
-          <Link href="/instructor/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
-            <span className="material-symbols-outlined">supervisor_account</span>
-            <span>Instructor Portal</span>
-          </Link>
-          <Link href="/admin/dashboard" className="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm">
-            <span className="material-symbols-outlined">admin_panel_settings</span>
-            <span>Admin Portal</span>
-          </Link>
+          <button 
+            onClick={async () => {
+              await logout();
+            }}
+            className="w-full flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all text-sm text-left font-semibold cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-primary">logout</span>
+            <span>Log Out</span>
+          </button>
         </div>
       </aside>
 
@@ -102,7 +117,12 @@ export default function StudentLayout({ children }) {
         <header className="w-[calc(100%-2rem)] mx-auto sticky top-4 z-40 bg-white/70 dark:bg-[#12111a]/70 backdrop-blur-lg border border-white/30 dark:border-white/10 shadow-md dark:shadow-black/40 flex items-center h-16 rounded-2xl mt-4 transition-all">
           <div className="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto">
             <div className="flex items-center gap-4">
-              <span className="font-heading text-headline-sm text-primary font-bold md:hidden">Lumina</span>
+              <span 
+                onClick={() => window.location.href = "/student/dashboard"}
+                className="font-heading text-headline-sm text-primary font-bold md:hidden cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+              >
+                Lumina
+              </span>
               <div className="hidden md:flex items-center bg-surface-container-low px-sm py-1.5 rounded-full w-96 border border-outline-variant/20">
                 <span className="material-symbols-outlined text-on-surface-variant mr-xs text-lg">search</span>
                 <input 

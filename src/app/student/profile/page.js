@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { getStudentProfileDetailsAction, updateStudentProfileAction } from "../../actions/student";
+
 
 export default function StudentProfilePage() {
   const [profile, setProfile] = useState({
@@ -39,22 +41,52 @@ export default function StudentProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({ ...profile });
 
-  const handleEditSubmit = (e) => {
-    e.preventDefault();
-    setProfile(editForm);
-    setIsEditing(false);
+  React.useEffect(() => {
+    async function loadProfile() {
+      const details = await getStudentProfileDetailsAction();
+      if (details) {
+        const updatedProfile = {
+          ...profile,
+          name: details.name,
+          email: details.email,
+          role: details.role === "Undergraduate" ? "Senior UI Designer & Python Enthusiast" : details.role,
+          courses: details.coursesCount,
+        };
+        setProfile(updatedProfile);
+        setEditForm(updatedProfile);
+      }
+    }
+    loadProfile();
+  }, []);
 
-    // Add activity log
-    setActivities([
-      {
-        id: Date.now(),
-        type: "manage_accounts",
-        text: "Updated user profile details",
-        time: "Just now",
-        bgClass: "bg-indigo-50 text-indigo-700",
-      },
-      ...activities,
-    ]);
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    const result = await updateStudentProfileAction({
+      name: editForm.name,
+      email: editForm.email,
+    });
+
+    if (result.success) {
+      setProfile(editForm);
+      setIsEditing(false);
+
+      // Add activity log
+      setActivities([
+        {
+          id: Date.now(),
+          type: "manage_accounts",
+          text: "Updated user profile details",
+          time: "Just now",
+          bgClass: "bg-indigo-50 text-indigo-700",
+        },
+        ...activities,
+      ]);
+
+      // Reload to propagate updated name to the sidebar layout immediately
+      window.location.reload();
+    } else {
+      alert(result.error || "Failed to save profile changes.");
+    }
   };
 
   const handleClaimBadge = () => {

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signup } from "../actions/auth";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -12,12 +13,14 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!agreeTerms) return;
-    // Simulate signup and redirect to student dashboard
-    router.push("/student/dashboard");
-  };
+  const [state, formAction, isPending] = useActionState(signup, null);
+
+  useEffect(() => {
+    if (state?.success && state?.redirectUrl) {
+      window.location.href = state.redirectUrl;
+    }
+  }, [state]);
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row overflow-hidden bg-background text-on-surface font-sans">
@@ -99,7 +102,12 @@ export default function SignupPage() {
           </div>
 
           {/* Signup Form */}
-          <form onSubmit={handleSubmit} className="space-y-md">
+          <form action={formAction} className="space-y-md">
+            {state?.error && (
+              <div className="p-3 text-xs font-bold text-error bg-error-container/20 rounded-xl border border-error/25">
+                {state.error}
+              </div>
+            )}
             {/* Full Name */}
             <div className="space-y-xs">
               <label className="text-xs font-bold text-on-surface-variant block" htmlFor="full_name">
@@ -112,6 +120,7 @@ export default function SignupPage() {
                 <input 
                   className="w-full pl-[44px] pr-md py-md bg-surface-container-lowest border border-outline-variant rounded-xl text-sm text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" 
                   id="full_name" 
+                  name="fullName"
                   placeholder="John Doe" 
                   required 
                   type="text"
@@ -133,6 +142,7 @@ export default function SignupPage() {
                 <input 
                   className="w-full pl-[44px] pr-md py-md bg-surface-container-lowest border border-outline-variant rounded-xl text-sm text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" 
                   id="email" 
+                  name="email"
                   placeholder="john@example.com" 
                   required 
                   type="email"
@@ -154,6 +164,7 @@ export default function SignupPage() {
                 <input 
                   className="w-full pl-[44px] pr-[44px] py-md bg-surface-container-lowest border border-outline-variant rounded-xl text-sm text-on-surface placeholder:text-outline-variant focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all" 
                   id="password" 
+                  name="password"
                   placeholder="••••••••" 
                   required 
                   type={showPassword ? "text" : "password"}
@@ -192,10 +203,11 @@ export default function SignupPage() {
 
             {/* Submit Button */}
             <button 
-              className="w-full py-md bg-primary text-on-primary rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-md" 
+              className="w-full py-md bg-primary text-on-primary rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed" 
               type="submit"
+              disabled={isPending}
             >
-              Create Account
+              {isPending ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 

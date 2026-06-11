@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { login } from "../actions/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,21 +12,15 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const trimmedEmail = email.toLowerCase().trim();
-    const trimmedPassword = password.trim();
-    
-    console.log("Attempting login with:", { email: trimmedEmail, password: trimmedPassword });
-    
-    if (trimmedEmail === "boss@lms.in" && trimmedPassword === "boss@password") {
-      router.push("/admin/dashboard");
-    } else if (trimmedEmail === "teacher@lms.in" && trimmedPassword === "teacher@password") {
-      router.push("/instructor/dashboard");
-    } else {
-      router.push("/student/dashboard");
+  const [state, formAction, isPending] = useActionState(login, null);
+
+  useEffect(() => {
+    if (state?.success && state?.redirectUrl) {
+      // Direct full redirect to trigger session load
+      window.location.href = state.redirectUrl;
     }
-  };
+  }, [state]);
+
 
   return (
     <div className="min-h-screen bg-background text-on-surface font-sans flex items-center justify-center p-4 md:p-lg">
@@ -89,7 +84,12 @@ export default function LoginPage() {
                 <p className="text-xs text-secondary">Please enter your details to sign in.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-md">
+              <form action={formAction} className="space-y-md">
+                {state?.error && (
+                  <div className="p-3 text-xs font-bold text-error bg-error-container/20 rounded-xl border border-error/25">
+                    {state.error}
+                  </div>
+                )}
                 {/* Email Field */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-on-surface-variant block" htmlFor="email">
@@ -162,10 +162,11 @@ export default function LoginPage() {
 
                 {/* Submit Button */}
                 <button 
-                  className="w-full py-3.5 bg-primary text-on-primary font-bold rounded-xl hover:brightness-110 active:scale-[0.99] transition-all shadow-md" 
+                  className="w-full py-3.5 bg-primary text-on-primary font-bold rounded-xl hover:brightness-110 active:scale-[0.99] transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed" 
                   type="submit"
+                  disabled={isPending}
                 >
-                  Log In
+                  {isPending ? "Logging In..." : "Log In"}
                 </button>
               </form>
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { logout } from "../actions/auth";
 
 export default function InstructorLayout({ children }) {
   const pathname = usePathname();
@@ -28,9 +29,9 @@ export default function InstructorLayout({ children }) {
   const sidebarItems = [
     { name: "Overview", href: "/instructor/dashboard", icon: "dashboard" },
     { name: "Course Builder", href: "/instructor/course-builder", icon: "menu_book" },
-    { name: "Students", href: "#", icon: "group" },
-    { name: "Analytics", href: "#", icon: "monitoring" },
-    { name: "Resources", href: "#", icon: "folder_open" },
+    { name: "Students", href: "/instructor/students", icon: "group" },
+    { name: "Analytics", href: "/instructor/analytics", icon: "monitoring" },
+    { name: "Resources", href: "/instructor/resources", icon: "folder_open" },
   ];
 
   return (
@@ -78,18 +79,15 @@ export default function InstructorLayout({ children }) {
         </nav>
 
         <div className="mt-auto flex flex-col gap-1 pt-4 border-t border-outline-variant/30">
-          <Link href="/" className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-highest transition-all duration-200 text-sm">
-            <span className="material-symbols-outlined">logout</span>
-            <span>Landing Page</span>
-          </Link>
-          <Link href="/student/dashboard" className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-highest transition-all duration-200 text-sm">
-            <span className="material-symbols-outlined">school</span>
-            <span>Student Dashboard</span>
-          </Link>
-          <Link href="/admin/dashboard" className="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-surface-container-highest transition-all duration-200 text-sm">
-            <span className="material-symbols-outlined">admin_panel_settings</span>
-            <span>Admin Portal</span>
-          </Link>
+          <button 
+            onClick={async () => {
+              await logout();
+            }}
+            className="w-full flex items-center gap-3 text-error hover:bg-error-container/15 px-4 py-2.5 rounded-lg transition-all duration-200 text-sm text-left font-semibold cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-error">logout</span>
+            <span>Log Out</span>
+          </button>
         </div>
       </aside>
 
@@ -128,14 +126,14 @@ export default function InstructorLayout({ children }) {
                   </span>
                 </button>
                 <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-xl">notifications</button>
-                <button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-xl">settings</button>
-                <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2 cursor-pointer transition-transform hover:scale-105">
+                <Link href="/instructor/settings" className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-xl">settings</Link>
+                <Link href="/instructor/profile" className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2 cursor-pointer transition-transform hover:scale-105 block">
                   <img 
                     alt="Instructor Profile Avatar" 
                     className="w-full h-full object-cover" 
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuA37JUm_TA9ZEcV3Ca87uUyU2QhtXHo07VQ_NGxB5dRIB8d7_tDU6E7DQ7rZ0LYr4xC1-7xmW0GO9PBJu5wJfK20lB-JmHvAs-t4otsNCVvyUhDv6en7VZQzUqNIzZWR1HeHUvPhkddpTVJSwcYFJK8cF7K6zbXsT63DtAYRLppCJhUmhLPmk57qQvPDkracq3juMKzhQNZRDazYIjNhvJQtm6uPqVIl1-oFAZE2A05gKqCovSVNPJ6S8RqZXycpy89Q0yAT7eaaGVG"
                   />
-                </div>
+                </Link>
               </div>
             </div>
           </div>
