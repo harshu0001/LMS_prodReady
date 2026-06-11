@@ -1,4 +1,4 @@
-# lmsv2 (Learning Management System)
+# Adhyan LMS (Learning Management System)
 
 A modern, full-stack Learning Management System (LMS) built with Next.js App Router, Prisma, PostgreSQL, and Tailwind CSS.
 
