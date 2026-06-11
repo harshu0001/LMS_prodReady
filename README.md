@@ -74,3 +74,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## License
 
 This project is private.
+
+**_Designed and Developed with 💖 by Harsh Pratap Singh_**
