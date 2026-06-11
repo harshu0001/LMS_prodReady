@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { toggleStreakDayAction, addDeadlineAction } from "../../actions/student";
+import { enrollInCourseByTitleAction } from "../../actions/courses";
 
 export default function StudentDashboardClient({
   initialUser,
@@ -14,6 +15,24 @@ export default function StudentDashboardClient({
   const [searchQuery, setSearchQuery] = useState("");
   const [localStreak, setLocalStreak] = useState(initialStreakDays);
   const [localDeadlines, setLocalDeadlines] = useState(initialDeadlines);
+  const [enrollingTitle, setEnrollingTitle] = useState(null);
+
+  const handlePreviewOrEnroll = async (title) => {
+    setEnrollingTitle(title);
+    try {
+      const result = await enrollInCourseByTitleAction(title);
+      if (result.success && result.courseId) {
+        window.location.href = `/student/courses/${result.courseId}`;
+      } else {
+        alert(result.error || "Failed to preview/enroll in this course.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to connect to enrollment service.");
+    } finally {
+      setEnrollingTitle(null);
+    }
+  };
 
   // Filter courses based on search
   const filteredCourses = initialCourses.filter(
@@ -269,12 +288,13 @@ export default function StudentDashboardClient({
                   <p className="text-xs text-on-surface-variant mb-md line-clamp-2 leading-relaxed">
                     {rec.desc}
                   </p>
-                  <Link
-                    href={activeCourse ? `/student/courses/${activeCourse.id}` : "#"}
-                    className="block text-center w-full py-2 border border-primary text-primary rounded-lg font-bold text-xs hover:bg-primary hover:text-on-primary transition-colors"
+                  <button
+                    onClick={() => handlePreviewOrEnroll(rec.title)}
+                    disabled={enrollingTitle === rec.title}
+                    className="block text-center w-full py-2 border border-primary text-primary rounded-lg font-bold text-xs hover:bg-primary hover:text-on-primary transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Preview Course
-                  </Link>
+                    {enrollingTitle === rec.title ? "Previewing..." : "Preview Course"}
+                  </button>
                 </div>
               ))}
             </div>

@@ -42,7 +42,7 @@ export default function StudentLayout({ children }) {
 
   const navItems = [
     { name: "Dashboard", href: "/student/dashboard", icon: "dashboard" },
-    { name: "My Courses", href: "/student/courses/1", icon: "menu_book" },
+    { name: "My Courses", href: "/student/courses", icon: "menu_book" },
     { name: "Quizzes", href: "/student/quizzes", icon: "task_alt" },
     { name: "Profile", href: "/student/profile", icon: "person" },
   ];
