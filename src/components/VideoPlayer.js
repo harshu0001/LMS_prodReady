@@ -10,7 +10,9 @@ export default function VideoPlayer({ videoUrl }) {
   const [isMuted, setIsMuted] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  
+  // Prevents hydration mismatch: iframe uses window.location.origin which only exists client-side
+  const [mounted, setMounted] = useState(false);
+
   const videoRef = useRef(null);
   const iframeRef = useRef(null);
   const containerRef = useRef(null);
@@ -25,6 +27,8 @@ export default function VideoPlayer({ videoUrl }) {
   };
 
   const youtubeId = getYoutubeId(videoUrl);
+  // Bunny Stream embed URLs use iframe.mediadelivery.net or player.mediadelivery.net
+  const isBunnyStream = videoUrl && videoUrl.includes("mediadelivery.net");
 
   // Sync controls with direct video element
   useEffect(() => {
@@ -142,6 +146,10 @@ export default function VideoPlayer({ videoUrl }) {
   };
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
@@ -174,13 +182,26 @@ export default function VideoPlayer({ videoUrl }) {
     >
       {/* Video Content Layer */}
       {youtubeId ? (
+        // Only render iframe on client to avoid hydration mismatch with window.location.origin
+        !mounted ? (
+          <div className="w-full h-full bg-black" />
+        ) : (
+          <iframe
+            ref={iframeRef}
+            src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&showinfo=0&origin=${window.location.origin}`}
+            className="w-full h-full border-none pointer-events-none origin-center"
+            style={{ transform: "scale(1.08)" }}
+            allow="autoplay; encrypted-media"
+            title="Course YouTube video player"
+          />
+        )
+      ) : isBunnyStream ? (
         <iframe
-          ref={iframeRef}
-          src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&showinfo=0&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
-          className="w-full h-full border-none pointer-events-none origin-center"
-          style={{ transform: "scale(1.08)" }}
-          allow="autoplay; encrypted-media"
-          title="Course YouTube video player"
+          src={videoUrl}
+          loading="lazy"
+          className="w-full h-full border-none"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowFullScreen={true}
         ></iframe>
       ) : (
         <video
@@ -194,11 +215,12 @@ export default function VideoPlayer({ videoUrl }) {
         ></video>
       )}
 
-      {/* Play Overlay Screen (Only visible when paused) */}
-      <div 
-        onClick={togglePlay}
-        className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer ${isPlaying ? "bg-black/0" : "bg-black/60 backdrop-blur-md"}`}
-      >
+      {/* Play Overlay Screen (Only visible when paused and NOT a Bunny stream) */}
+      {!isBunnyStream && (
+        <div 
+          onClick={togglePlay}
+          className={`absolute inset-0 flex items-center justify-center transition-all duration-300 z-10 cursor-pointer ${isPlaying ? "bg-black/0 pointer-events-none" : "bg-black/60 backdrop-blur-md"}`}
+        >
         {!isPlaying && (
           <button 
             onClick={(e) => {
@@ -213,10 +235,12 @@ export default function VideoPlayer({ videoUrl }) {
           </button>
         )}
       </div>
+      )}
 
-      {/* Custom Controls Bar Overlay */}
-      <div className="absolute bottom-0 left-0 w-full p-sm md:p-md bg-gradient-to-t from-black/90 to-transparent flex flex-col gap-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-        <input 
+      {/* Custom Controls Bar Overlay (Hidden for Bunny Stream so native quality selector works) */}
+      {!isBunnyStream && (
+        <div className="absolute bottom-0 left-0 w-full p-sm md:p-md bg-gradient-to-t from-black/90 to-transparent flex flex-col gap-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+          <input 
           type="range" 
           min="0" 
           max={duration} 
@@ -273,6 +297,7 @@ export default function VideoPlayer({ videoUrl }) {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }

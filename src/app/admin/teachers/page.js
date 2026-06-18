@@ -13,7 +13,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-101",
       name: "Sarah Chen",
-      email: "sarah.chen@adhyan.edu",
+      email: "sarah.chen@crashup.edu",
       specialization: "UX/UI Design & Psychology",
       department: "Computer Science",
       activeCourses: 4,
@@ -24,7 +24,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-102",
       name: "Marcus Rodriguez",
-      email: "m.rodriguez@adhyan.edu",
+      email: "m.rodriguez@crashup.edu",
       specialization: "Full Stack Development",
       department: "Computer Science",
       activeCourses: 6,
@@ -35,7 +35,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-103",
       name: "Linda Wright",
-      email: "l.wright@adhyan.edu",
+      email: "l.wright@crashup.edu",
       specialization: "Ethics & Philosophy",
       department: "Liberal Arts",
       activeCourses: 2,
@@ -46,7 +46,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-104",
       name: "David Miller",
-      email: "david.m@adhyan.edu",
+      email: "david.m@crashup.edu",
       specialization: "Marketing Dynamics",
       department: "Business Management",
       activeCourses: 3,
@@ -57,7 +57,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-105",
       name: "Dr. Sarah Jenkins",
-      email: "sarah.j@adhyan.edu",
+      email: "sarah.j@crashup.edu",
       specialization: "Advanced Physics",
       department: "Applied Sciences",
       activeCourses: 5,
@@ -68,7 +68,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-106",
       name: "Mark Thompson",
-      email: "m.thompson@adhyan.edu",
+      email: "m.thompson@crashup.edu",
       specialization: "Creative Writing & Literature",
       department: "Liberal Arts",
       activeCourses: 3,
@@ -79,7 +79,7 @@ export default function TeacherManagementPage() {
     {
       id: "T-107",
       name: "Dr. James Wilson",
-      email: "james.wilson@adhyan.edu",
+      email: "james.wilson@crashup.edu",
       specialization: "Applied Math & Calculus",
       department: "Applied Sciences",
       activeCourses: 4,

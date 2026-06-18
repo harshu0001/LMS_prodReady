@@ -58,16 +58,19 @@ export default function CoursePlayerPage({ params }) {
 
           // Parse description JSON
           let parsedDesc = data.description;
-          let videoUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // Fallback URL
-          let assets = ["Design_Guide.pdf"];
+          let videoUrl = ""; // No fallback — only use what was actually saved
+          let assets = [];
 
           try {
             const parsed = JSON.parse(data.description);
-            parsedDesc = parsed.text;
-            if (parsed.videoUrl) videoUrl = parsed.videoUrl;
+            parsedDesc = parsed.text || parsedDesc;
+            // Only use videoUrl if it's a real persisted URL (not a blob or empty)
+            if (parsed.videoUrl && !parsed.videoUrl.startsWith("blob:")) {
+              videoUrl = parsed.videoUrl;
+            }
             if (parsed.assets && parsed.assets.length > 0) assets = parsed.assets;
           } catch (e) {
-            // Description is plain text
+            // Description is plain text, not JSON
           }
 
           setActiveLesson({
@@ -83,7 +86,7 @@ export default function CoursePlayerPage({ params }) {
               title: "Module 1: Getting Started",
               lessons: [
                 { id: "1-1", title: `Welcome to ${data.title}`, duration: "05:00", completed: true, active: true, videoUrl: videoUrl, assets: assets },
-                { id: "1-2", title: "Course Curriculum Overview", duration: "08:15", completed: false, active: false, videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+                { id: "1-2", title: "Course Curriculum Overview", duration: "08:15", completed: false, active: false, videoUrl: "" },
               ],
             },
             {
@@ -119,8 +122,8 @@ export default function CoursePlayerPage({ params }) {
     setActiveLesson({
       title: target.title,
       desc: target.desc || `Detailed overview of ${target.title}. Practice standard definitions, templates, and layouts to build dynamic designs.`,
-      videoUrl: target.videoUrl || "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      assets: target.assets || ["Asset_Cheat_Sheet.pdf"],
+      videoUrl: target.videoUrl || "",
+      assets: target.assets || [],
     });
   };
 
@@ -284,8 +287,16 @@ export default function CoursePlayerPage({ params }) {
 
         {/* Video Player */}
         <div className="w-full max-w-[1100px] mx-auto p-md md:p-xl space-y-md">
-          {/* Functional Dynamic Video Player component! */}
-          <VideoPlayer videoUrl={activeLesson.videoUrl} />
+          {/* Render VideoPlayer only if a real URL exists, otherwise show placeholder */}
+          {activeLesson.videoUrl ? (
+            <VideoPlayer videoUrl={activeLesson.videoUrl} />
+          ) : (
+            <div className="aspect-video w-full rounded-2xl bg-slate-900 flex flex-col items-center justify-center gap-3 border border-outline-variant/20 shadow-xl">
+              <span className="material-symbols-outlined text-5xl text-slate-500">video_library</span>
+              <p className="text-slate-400 text-sm font-semibold">No video available for this lesson</p>
+              <p className="text-slate-500 text-xs">The instructor hasn&apos;t uploaded a video yet.</p>
+            </div>
+          )}
 
           {/* Lesson Header */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-md border-b border-outline-variant/30 pb-lg">

@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import VideoPlayer from "../../../components/VideoPlayer";
 import { createCourseAction } from "../../actions/courses";
+import { Upload } from "tus-js-client";
 
 export default function CourseBuilderPage() {
   // Course Metadata State
@@ -14,9 +15,9 @@ export default function CourseBuilderPage() {
   const [sections, setSections] = useState([
     {
       id: "sec-1",
-      title: "Introduction to Adhyan",
+      title: "Introduction to Crashup",
       lessons: [
-        { id: "les-1-1", title: "1.1 Welcome Message", type: "video", desc: "Welcome to Adhyan Learning! Learn the platform fundamentals.", videoName: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", assets: ["Syllabus.pdf"] },
+        { id: "les-1-1", title: "1.1 Welcome Message", type: "video", desc: "Welcome to Crashup Learning! Learn the platform fundamentals.", videoName: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", assets: ["Syllabus.pdf"] },
         { id: "les-1-2", title: "1.2 Learning Objectives", type: "document", desc: "Define the core milestones and objectives of the course.", assets: ["Objectives_Guide.pdf"] },
       ],
     },
@@ -52,8 +53,17 @@ export default function CourseBuilderPage() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [youtubeInput, setYoutubeInput] = useState("");
 
+  // Real upload state
+  const [uploadProgress, setUploadProgress] = useState(0);  // 0-100
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadedFileName, setUploadedFileName] = useState("");
+
   const fileInputRef = useRef(null);
   const assetInputRef = useRef(null);
+
+  // Track if the current lesson has a local file selected (blob URL — not persistable)
+  const [localVideoFile, setLocalVideoFile] = useState(null);
 
   // Form edit handlers
   const handleTitleChange = (val) => {
@@ -127,41 +137,107 @@ export default function CourseBuilderPage() {
     setActiveLesId(lesId);
   };
 
-  const handleVideoFileSelected = (e) => {
+  const handleVideoFileSelected = async (e) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
-    const blobUrl = URL.createObjectURL(file);
 
-    const nextSections = sections.map((s) => {
-      if (s.id === activeSecId) {
-        return {
-          ...s,
-          lessons: s.lessons.map((l) => {
-            if (l.id === activeLesId) {
-              return { ...l, videoName: blobUrl, type: "video" };
-            }
-            return l;
-          }),
-        };
+    setUploadProgress(0);
+    setUploadError("");
+    setUploading(true);
+    setUploadedFileName(file.name);
+    setLocalVideoFile(file);
+
+    try {
+      // Step 1: Get Video ID and secure signature from our backend
+      const res = await fetch("/api/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileName: file.name }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to initialize Bunny.net upload");
       }
-      return s;
-    });
-    setSections(nextSections);
-    setShowUploadModal(false);
-    alert(`Video file "${file.name}" loaded successfully in player.`);
+
+      const { libraryId, videoId, signature, expire } = await res.json();
+      
+      // We will construct the Bunny embed URL
+      // (The VideoPlayer component will automatically detect and play this as an iframe)
+      // Note: We use the dedicated player domain for embeds, not the direct CDN host
+      const finalVideoUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}`;
+
+      // Step 2: Upload directly to Bunny.net using TUS (Resumable, reliable for huge 4K files)
+      await new Promise((resolve, reject) => {
+        const upload = new Upload(file, {
+          endpoint: "https://video.bunnycdn.com/tusupload",
+          retryDelays: [0, 3000, 5000, 10000, 20000],
+          headers: {
+            AuthorizationSignature: signature,
+            AuthorizationExpire: String(expire),
+            VideoId: videoId,
+            LibraryId: String(libraryId),
+          },
+          metadata: {
+            filename: file.name,
+            filetype: file.type,
+          },
+          onError: (error) => reject(error),
+          onProgress: (bytesUploaded, bytesTotal) => {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(0);
+            setUploadProgress(Number(percentage));
+          },
+          onSuccess: () => resolve(),
+        });
+
+        // Start the upload
+        upload.start();
+      });
+
+      // Step 3: Save the Bunny.net stream URL to the lesson
+      const nextSections = sections.map((s) => {
+        if (s.id === activeSecId) {
+          return {
+            ...s,
+            lessons: s.lessons.map((l) => {
+              if (l.id === activeLesId) {
+                return { ...l, videoName: finalVideoUrl, type: "video", isLocalFile: false };
+              }
+              return l;
+            }),
+          };
+        }
+        return s;
+      });
+      setSections(nextSections);
+      setLocalVideoFile(null);
+      setShowUploadModal(false);
+      setUploadProgress(0);
+
+    } catch (err) {
+      console.error("Upload error:", err);
+      setUploadError(err.message || "Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
+
 
   const handleYoutubeSubmit = (e) => {
     e.preventDefault();
     if (!youtubeInput.trim()) return;
 
+    // Clear any local file since we're now using a YouTube URL
+    setLocalVideoFile(null);
+
     const nextSections = sections.map((s) => {
       if (s.id === activeSecId) {
         return {
           ...s,
           lessons: s.lessons.map((l) => {
             if (l.id === activeLesId) {
-              return { ...l, videoName: youtubeInput.trim(), type: "video" };
+              return { ...l, videoName: youtubeInput.trim(), type: "video", isLocalFile: false };
             }
             return l;
           }),
@@ -172,7 +248,6 @@ export default function CourseBuilderPage() {
     setSections(nextSections);
     setShowUploadModal(false);
     setYoutubeInput("");
-    alert("YouTube video link connected successfully.");
   };
 
   const handleAssetUpload = (e) => {
@@ -200,21 +275,26 @@ export default function CourseBuilderPage() {
   const handlePublish = async () => {
     setPublishing(true);
     try {
-      // Gather active assets and video details
-      const activeVideo = activeLes.videoName || "";
+      // Use only the first lesson's video URL if it's a real URL (not a blob)
+      const firstLesson = sections[0]?.lessons[0];
+      const activeVideo = firstLesson?.videoName || "";
+      // Blob URLs are in-memory only — don't send them to the server
+      const persistableVideoUrl = activeVideo.startsWith("blob:") ? "" : activeVideo;
+
       const activeAssets = activeLes.assets || [];
 
       const result = await createCourseAction({
         title: courseTitle,
         category: courseCategory,
         description: courseDesc,
-        videoUrl: activeVideo,
+        videoUrl: persistableVideoUrl,
         assets: activeAssets,
       });
 
       if (result.success) {
         setIsPublished(true);
-        alert(`Course "${courseTitle}" published successfully!\nIt is now recommended for you on the student's dashboard.`);
+        const videoNote = persistableVideoUrl ? "" : "\n\nNote: Local video files can\'t be saved to the database. Use a YouTube link for video content that persists.";
+        alert(`Course "${courseTitle}" published successfully!${videoNote}`);
       } else {
         alert(result.error || "Failed to publish course.");
       }
@@ -422,6 +502,16 @@ export default function CourseBuilderPage() {
             {activeLes.type === "video" && activeLes.videoName && (
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">Video Player Preview</span>
+                {/* Warning banner for local file uploads */}
+                {activeLes.isLocalFile && (
+                  <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800">
+                    <span className="material-symbols-outlined text-sm mt-0.5 shrink-0">warning</span>
+                    <div>
+                      <p className="text-[11px] font-bold">Local file — preview only</p>
+                      <p className="text-[10px] mt-0.5 leading-relaxed">This file is loaded in your browser but <strong>cannot be saved</strong> to the database. Use a YouTube link instead for video that persists on the student dashboard.</p>
+                    </div>
+                  </div>
+                )}
                 <div className="rounded-xl overflow-hidden border border-outline-variant/60 shadow-sm">
                   <VideoPlayer videoUrl={activeLes.videoName} />
                 </div>
@@ -545,55 +635,110 @@ export default function CourseBuilderPage() {
         className="hidden" 
       />
 
-      {/* Upload Video / YouTube Link Modal Dialogue */}
+      {/* Upload Video / YouTube Link Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-[#141320] border border-outline-variant/60 rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in zoom-in-95 duration-200">
-            <button 
-              onClick={() => setShowUploadModal(false)}
-              className="absolute right-4 top-4 p-1 rounded-full hover:bg-surface-container text-on-surface-variant cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-xl">close</span>
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-[#141320] border border-outline-variant/60 rounded-2xl max-w-md w-full p-6 shadow-xl relative">
+            {!uploading && (
+              <button
+                onClick={() => { setShowUploadModal(false); setUploadError(""); setUploadProgress(0); }}
+                className="absolute right-4 top-4 p-1 rounded-full hover:bg-surface-container text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
+            )}
             <h3 className="font-heading text-headline-sm font-bold text-on-surface mb-6">Upload Lesson Video</h3>
-            
-            <div className="space-y-6">
-              {/* Option A: Direct upload */}
-              <div>
-                <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Option 1: Upload Video File</h4>
+
+            {/* Active upload progress */}
+            {uploading ? (
+              <div className="space-y-5">
+                <div className="flex items-center gap-3 p-4 bg-primary/5 border border-primary/20 rounded-xl">
+                  <span className="material-symbols-outlined text-primary text-2xl animate-pulse">upload</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-on-surface truncate">{uploadedFileName}</p>
+                    <p className="text-[10px] text-on-surface-variant mt-0.5">Uploading to Cloudflare R2...</p>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[11px] font-bold">
+                    <span className="text-on-surface-variant">Progress</span>
+                    <span className="text-primary">{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full h-3 bg-slate-100 dark:bg-surface-container-high rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-primary rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                  <p className="text-[10px] text-on-surface-variant">
+                    {uploadProgress < 100 ? "Upload in progress — please keep this tab open" : "Finalizing..."}
+                  </p>
+                </div>
+              </div>
+            ) : uploadError ? (
+              /* Error state */
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+                  <span className="material-symbols-outlined text-sm mt-0.5 shrink-0">error</span>
+                  <div>
+                    <p className="text-xs font-bold">Upload failed</p>
+                    <p className="text-[11px] mt-1">{uploadError}</p>
+                  </div>
+                </div>
                 <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-4 border-2 border-dashed border-outline-variant/60 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all text-xs font-bold text-primary flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => { setUploadError(""); fileInputRef.current?.click(); }}
+                  className="w-full py-3 border-2 border-dashed border-outline-variant/60 rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all text-xs font-bold text-primary flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span className="material-symbols-outlined">video_file</span>
-                  <span>Select Video File</span>
+                  <span className="material-symbols-outlined">refresh</span>
+                  <span>Try Again</span>
                 </button>
               </div>
+            ) : (
+              /* Default state — pick file or YouTube */
+              <div className="space-y-6">
+                {/* Option 1: Real file upload to R2 */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Option 1: Upload Video File</h4>
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">4K supported</span>
+                  </div>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full py-6 border-2 border-dashed border-outline-variant rounded-xl hover:border-primary/50 hover:bg-primary/5 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group"
+                  >
+                    <span className="material-symbols-outlined text-3xl text-outline group-hover:text-primary transition-colors">video_file</span>
+                    <span className="font-bold text-xs text-on-surface">Click to select video file</span>
+                    <span className="text-[10px] text-outline">MP4, MOV, WebM • Any size • Uploads directly to cloud</span>
+                  </button>
+                </div>
 
-              <div className="relative flex items-center justify-center py-2">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-outline-variant/30"></div></div>
-                <span className="relative px-3 bg-white dark:bg-[#141320] text-[10px] font-bold text-on-surface-variant uppercase">Or</span>
+                <div className="relative flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-outline-variant/30" /></div>
+                  <span className="relative px-3 bg-white dark:bg-[#141320] text-[10px] font-bold text-on-surface-variant uppercase">Or</span>
+                </div>
+
+                {/* Option 2: YouTube Link */}
+                <form onSubmit={handleYoutubeSubmit} className="space-y-3">
+                  <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Option 2: YouTube Link</h4>
+                  <input
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    value={youtubeInput}
+                    onChange={(e) => setYoutubeInput(e.target.value)}
+                    className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest p-3 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-primary text-on-primary py-2.5 rounded-xl font-bold text-xs hover:opacity-90 active:scale-95 transition-all shadow-md cursor-pointer"
+                  >
+                    Connect YouTube Video
+                  </button>
+                </form>
               </div>
-
-              {/* Option B: YouTube Link */}
-              <form onSubmit={handleYoutubeSubmit} className="space-y-3">
-                <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Option 2: Paste Private YouTube Link</h4>
-                <input
-                  type="url"
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  value={youtubeInput}
-                  onChange={(e) => setYoutubeInput(e.target.value)}
-                  className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest p-3 text-xs focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-primary text-on-primary py-2.5 rounded-xl font-bold text-xs hover:opacity-90 active:scale-95 transition-all shadow-md cursor-pointer"
-                >
-                  Connect YouTube Video
-                </button>
-              </form>
-            </div>
+            )}
           </div>
         </div>
       )}

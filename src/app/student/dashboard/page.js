@@ -61,9 +61,10 @@ export default async function StudentDashboardPage() {
     updatedAt: s.updatedAt.toISOString(),
   }));
 
-  // Fetch course recommendations
+  // Fetch newest course recommendations so newly created courses show up first
   const recommendations = await db.recommendation.findMany({
-    take: 5,
+    take: 10,
+    orderBy: { createdAt: "desc" }
   });
 
   return (

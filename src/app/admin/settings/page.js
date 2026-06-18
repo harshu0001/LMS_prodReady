@@ -6,8 +6,8 @@ export default function SystemSettingsPage() {
   const [activeTab, setActiveTab] = useState("general"); // general, branding, payments, notifications
   
   // Site identity states
-  const [siteName, setSiteName] = useState("Adhyan Learning");
-  const [supportEmail, setSupportEmail] = useState("support@adhyanlearning.edu");
+  const [siteName, setSiteName] = useState("Crashup Learning");
+  const [supportEmail, setSupportEmail] = useState("support@crashuplearning.edu");
   const [language, setLanguage] = useState("English (US)");
   const [timezone, setTimezone] = useState("(GMT-05:00) Eastern Time");
 

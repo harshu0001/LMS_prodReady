@@ -45,7 +45,7 @@ export default function InstructorLayout({ children }) {
             </div>
             <span className="font-heading text-headline-sm text-primary font-extrabold tracking-tight">Instructor Portal</span>
           </div>
-          <p className="text-[11px] text-on-surface-variant/70 font-semibold uppercase tracking-wider pl-1.5 mt-1">Adhyan Learning</p>
+          <p className="text-[11px] text-on-surface-variant/70 font-semibold uppercase tracking-wider pl-1.5 mt-1">Crashup Learning</p>
         </div>
 
         <nav className="flex-grow space-y-xs">
@@ -103,7 +103,7 @@ export default function InstructorLayout({ children }) {
               >
                 <span className="material-symbols-outlined">menu</span>
               </button>
-              <span className="font-heading text-headline-sm font-bold text-primary">Adhyan Learning</span>
+              <span className="font-heading text-headline-sm font-bold text-primary">Crashup Learning</span>
             </div>
 
             <div className="flex items-center gap-4 lg:gap-8 flex-1 justify-end">
@@ -150,7 +150,7 @@ export default function InstructorLayout({ children }) {
                 <span className="material-symbols-outlined">close</span>
               </button>
               <div className="mb-lg flex items-center gap-2 pt-4 px-2">
-                <span className="font-heading text-headline-sm text-primary font-bold">Adhyan Portal</span>
+                <span className="font-heading text-headline-sm text-primary font-bold">Crashup Portal</span>
               </div>
               <nav className="flex-1 space-y-1">
                 {sidebarItems.map((item) => (
